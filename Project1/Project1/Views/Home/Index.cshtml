@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Learning Center Home";
+}
+
+<div class="jumbotron">
+    <div class="text-left">
+        <h1 class="display-4">The Learning Center</h1>
+        <p>The place for technology classes</p>
+    </div>
+
+    <form asp-action="Index">
+        <div class="form-group">
+            <input type="submit" value="Learn More >>" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col">
+            <p class="h4 text-primary">Class List</p>
+            <p class="text-muted">See all our class offerings</p>
+        </div>
+        <div class="col">
+            <p class="h4 text-primary">Your enrolled classes</p>
+            <p class="text-muted">See the classes you are enrolled in</p>
+        </div>
+        <div class="col">
+            <p class="h4 text-primary">Enroll in a class</p>
+            <p class="text-muted">Take a new class</p>
+        </div>
+    </div>
+</div>
