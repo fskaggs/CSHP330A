@@ -1,0 +1,10 @@
+﻿@model Project1.Models.ClassViewModel
+
+<title>All Courses Listing</title>
+
+<div>
+    @foreach (ClassModel c in Model.Classes)
+    {
+        <h3>@c.ClassName</h3>
+    }
+</div>

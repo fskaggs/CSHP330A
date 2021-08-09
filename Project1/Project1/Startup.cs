@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Project1.Data;
+using Project1.Repository;
+using Project1.Repository.Models;
+using Project1.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +38,14 @@ namespace Project1
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            // Register and instantiate a single instance of the repositories
+            services.AddSingleton<IClassRepository, ClassRepository>();
+            services.AddSingleton<IUserClassRepository, UserClassRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+
+            // Register and instantiate a single instance of the managers
+            services.AddSingleton<IClassManager, ClassManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
