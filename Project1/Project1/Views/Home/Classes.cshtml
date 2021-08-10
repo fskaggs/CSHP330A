@@ -2,9 +2,26 @@
 
 <title>All Courses Listing</title>
 
+<h1>Classes</h1>
+
 <div>
-    @foreach (ClassModel c in Model.Classes)
-    {
-        <h3>@c.ClassName</h3>
-    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Class Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ClassModel c in Model.Classes)
+            {
+                <tr>
+                    <td>@c.ClassName</td>
+                    <td>@c.ClassDescription</td>
+                    <td>@String.Format("{0:c}", c.ClassPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

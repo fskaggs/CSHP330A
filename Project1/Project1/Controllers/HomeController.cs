@@ -60,5 +60,25 @@ namespace Project1.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(Registration UserRegistration)
+        {
+            if (ModelState.IsValid)
+            {
+                //Complete Registration
+                return View("Registered", UserRegistration);
+            }
+            else
+            {
+                return View(UserRegistration);
+            }
+        }
     }
 }
