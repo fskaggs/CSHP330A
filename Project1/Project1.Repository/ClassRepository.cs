@@ -11,8 +11,8 @@ namespace Project1.Repository
     {
         public Class[] GetAllClasses()
         {
-            Class[] classes = DatabaseAccessor.Instance
-                .Classes.Select(t => new Class
+            Class[] classes = DatabaseAccessor.Instance.Classes
+                .Select(t => new Class
                 {
                     ClassId = t.ClassId,
                     ClassDescription = t.ClassDescription,

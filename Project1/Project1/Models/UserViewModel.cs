@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Project1.Models
 {
-    public class ClassViewModel
+    public class UserViewModel
     {
-        public ClassModel[] Classes { get; set; }
+        public UserModel[] Users { get; set; }
     }
 }

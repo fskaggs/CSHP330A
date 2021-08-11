@@ -11,12 +11,31 @@ namespace Project1.Repository
     {
         public User[] GetAllUsers()
         {
-            throw new NotImplementedException();
+            User[] users = DatabaseAccessor.Instance.Users
+                .Select(u => new User()
+                {
+                    UserId = u.UserId,
+                    UserEmail = u.UserEmail,
+                    UserIsAdmin = u.UserIsAdmin,
+                    UserPassword = u.UserPassword
+                })
+                .ToArray<User>();
+
+            return users;
         }
 
         public User GetUser(int UserId)
         {
-            throw new NotImplementedException();
+            User user = (User)DatabaseAccessor.Instance.Users
+                .Select(u => new User()
+                {
+                    UserId = u.UserId,
+                    UserEmail = u.UserEmail,
+                    UserIsAdmin = u.UserIsAdmin,
+                    UserPassword = u.UserPassword
+                });
+
+            return user;
         }
     }
 }
