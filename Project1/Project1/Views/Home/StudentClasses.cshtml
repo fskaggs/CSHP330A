@@ -1,0 +1,25 @@
+﻿@model Project1.Models.ClassViewModel
+
+<h1>Student Classes</h1>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ClassModel c in Model.Classes)
+            {
+                <tr>
+                    <td>@c.ClassName</td>
+                    <td>@c.ClassDescription</td>
+                    <td>@String.Format("{0:c}", c.ClassPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

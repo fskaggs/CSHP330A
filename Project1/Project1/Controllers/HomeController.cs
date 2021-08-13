@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Project1.Business;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project1.Controllers
 {
@@ -14,6 +15,7 @@ namespace Project1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IClassManager classManager;
+        private readonly IUserManager userManager;
 
         public HomeController(ILogger<HomeController> logger, IClassManager ClassManagerInstance)
         //public HomeController(ILogger<HomeController> logger)
@@ -36,6 +38,37 @@ namespace Project1.Controllers
                 })
                 .ToArray()
             };
+
+            return View(model);
+        }
+
+        //[Authorize]
+        public IActionResult StudentClasses()
+        {
+            var userName = HttpContext.User.Identity.Name;
+            Project1.Models.UserModel userInfo = (Project1.Models.UserModel)userManager.Users
+                .Where(n => userName == n.UserEmail)
+                .Select(u => new Project1.Models.UserModel()
+                {
+                    UserId = u.UserId,
+                    UserEmail = u.UserEmail,
+                    UserIsAdmin = u.UserIsAdmin,
+                    UserPassword = u.UserPassword
+                });
+
+            ClassViewModel model = new ClassViewModel()
+                {
+                Classes = classManager.Classes
+                    //.Where(c  => userInfo.UserId == c.
+                    .Select(t => new Project1.Models.ClassModel()
+                    {
+                        ClassId = t.ClassId,
+                        ClassDescription = t.ClassDescription,
+                        ClassName = t.ClassName,
+                        ClassPrice = t.ClassPrice
+                    })
+                    .ToArray()
+                };
 
             return View(model);
         }
