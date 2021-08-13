@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project1.Business
 {
-    class UserManager : IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IUserRepository userRepository;
 
@@ -37,13 +37,24 @@ namespace Project1.Business
         {
             User user = userRepository.GetUser(UserId);
 
-            return new UserModel()
+            UserModel userModel = new UserModel()
             {
                 UserId = user.UserId,
                 UserEmail = user.UserEmail,
                 UserIsAdmin = user.UserIsAdmin,
-                UserPassword = user.UserPassword
+                UserPassword = user.UserPassword,
+                Classes = user.Classes
+                    .Select(c => new Models.ClassModel()
+                    {
+                        ClassId = c.ClassId,
+                        ClassName = c.ClassName,
+                        ClassDescription = c.ClassDescription,
+                        ClassPrice = c.ClassPrice
+                    })
+                    .ToList<Models.ClassModel>()
             };
+
+            return userModel;
         }
     }
 }

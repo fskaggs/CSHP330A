@@ -17,11 +17,14 @@ namespace Project1.Controllers
         private readonly IClassManager classManager;
         private readonly IUserManager userManager;
 
-        public HomeController(ILogger<HomeController> logger, IClassManager ClassManagerInstance)
+        public HomeController(ILogger<HomeController> logger, 
+                              IClassManager ClassManagerInstance,
+                              IUserManager UserManagerInstance)
         //public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             classManager = ClassManagerInstance;
+            userManager = UserManagerInstance;
         }
 
         public IActionResult Classes()
@@ -45,32 +48,27 @@ namespace Project1.Controllers
         //[Authorize]
         public IActionResult StudentClasses()
         {
-            var userName = HttpContext.User.Identity.Name;
-            Project1.Models.UserModel userInfo = (Project1.Models.UserModel)userManager.Users
-                .Where(n => userName == n.UserEmail)
-                .Select(u => new Project1.Models.UserModel()
-                {
-                    UserId = u.UserId,
-                    UserEmail = u.UserEmail,
-                    UserIsAdmin = u.UserIsAdmin,
-                    UserPassword = u.UserPassword
-                });
+            int UserId = 2;
+            Business.UserModel user = userManager.User(UserId);
 
-            ClassViewModel model = new ClassViewModel()
-                {
-                Classes = classManager.Classes
-                    //.Where(c  => userInfo.UserId == c.
-                    .Select(t => new Project1.Models.ClassModel()
+            Models.UserModel userModel = new Models.UserModel()
+            {
+                UserId = user.UserId,
+                UserEmail = user.UserEmail,
+                UserIsAdmin = user.UserIsAdmin,
+                UserPassword = user.UserPassword,
+                Classes = user.Classes
+                    .Select(c => new Models.ClassModel()
                     {
-                        ClassId = t.ClassId,
-                        ClassDescription = t.ClassDescription,
-                        ClassName = t.ClassName,
-                        ClassPrice = t.ClassPrice
+                        ClassId = c.ClassId,
+                        ClassName = c.ClassName,
+                        ClassDescription = c.ClassDescription,
+                        ClassPrice = c.ClassPrice
                     })
-                    .ToArray()
-                };
+                    .ToList<Models.ClassModel>()
+            };
 
-            return View(model);
+            return View(userModel);
         }
 
         public IActionResult Index()

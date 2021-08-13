@@ -46,6 +46,7 @@ namespace Project1
 
             // Register and instantiate a single instance of the managers
             services.AddSingleton<IClassManager, ClassManager>();
+            services.AddSingleton<IUserManager, UserManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

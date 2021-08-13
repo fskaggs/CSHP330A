@@ -11,5 +11,6 @@ namespace Project1.Models
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
         public bool UserIsAdmin { get; set; }
+        public List<ClassModel> Classes { get; set; }
     }
 }
