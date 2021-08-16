@@ -56,5 +56,38 @@ namespace Project1.Business
 
             return userModel;
         }
+
+        public UserModel User(string UserEmail)
+        {
+            User user = userRepository.GetUser(UserEmail);
+            UserModel userModel = null;
+
+            if (user != null)
+            {
+                 userModel = new UserModel()
+                {
+                    UserId = user.UserId,
+                    UserEmail = user.UserEmail,
+                    UserIsAdmin = user.UserIsAdmin,
+                    UserPassword = user.UserPassword,
+                    Classes = user.Classes
+                        .Select(c => new Models.ClassModel()
+                        {
+                            ClassId = c.ClassId,
+                            ClassName = c.ClassName,
+                            ClassDescription = c.ClassDescription,
+                            ClassPrice = c.ClassPrice
+                        })
+                        .ToList<Models.ClassModel>()
+                };
+            }
+
+            return userModel;
+        }
+    
+        public void RegisterUser(string UserEmail, string UserPassword)
+        {
+            userRepository.AddUser(UserEmail, UserPassword);
+        }
     }
 }

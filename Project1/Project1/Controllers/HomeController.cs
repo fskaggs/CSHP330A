@@ -101,15 +101,30 @@ namespace Project1.Controllers
         [HttpPost]
         public IActionResult Register(Registration UserRegistration)
         {
-            if (ModelState.IsValid)
-            {
-                //Complete Registration
-                return View("Registered", UserRegistration);
-            }
-            else
+            if (ModelState.IsValid == false)
             {
                 return View(UserRegistration);
             }
+
+            //Check if user is already registered
+            var user = userManager.User(UserRegistration.Email);
+            if (user != null)
+            {
+                ModelState.AddModelError("Email", "Error: User registration already exists");
+                return View(UserRegistration);
+            }
+
+            if (UserRegistration.Password != UserRegistration.Password2)
+            {
+                ModelState.AddModelError("Password2", "Error: Passwords do not match");
+                return View(UserRegistration);
+            }
+
+            // Store the new user
+            userManager.RegisterUser(UserRegistration.Email, UserRegistration.Password);
+
+            //Complete Registration
+            return View("Registered", UserRegistration);
         }
     }
 }

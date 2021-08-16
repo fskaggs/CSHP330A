@@ -10,5 +10,7 @@ namespace Project1.Repository.Models
     {
         User[] GetAllUsers();
         User GetUser(int UserId);
+        User GetUser(string UserEmail);
+        public void AddUser(string UserEmail, string UserPassword);
     }
 }
