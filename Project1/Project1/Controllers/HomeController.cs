@@ -126,5 +126,24 @@ namespace Project1.Controllers
             //Complete Registration
             return View("Registered", UserRegistration);
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(UserLogin LoginInfo)
+        {
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                return View(LoginInfo);
+            }
+        }
     }
 }
