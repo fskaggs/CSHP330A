@@ -8,6 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Project1.Business;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Project1.Controllers
 {
@@ -45,11 +51,10 @@ namespace Project1.Controllers
             return View(model);
         }
 
-        //[Authorize]
+        [Authorize(Roles = "User")]
         public IActionResult StudentClasses()
         {
-            int UserId = 2;
-            Business.UserModel user = userManager.User(UserId);
+            Business.UserModel user = userManager.User(User.Identity.Name);
 
             Models.UserModel userModel = new Models.UserModel()
             {
@@ -114,12 +119,6 @@ namespace Project1.Controllers
                 return View(UserRegistration);
             }
 
-            if (UserRegistration.Password != UserRegistration.Password2)
-            {
-                ModelState.AddModelError("Password2", "Error: Passwords do not match");
-                return View(UserRegistration);
-            }
-
             // Store the new user
             userManager.RegisterUser(UserRegistration.Email, UserRegistration.Password);
 
@@ -130,20 +129,82 @@ namespace Project1.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewData["ReturnUrl"] = Request.Query["returnUrl"];
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(UserLogin LoginInfo)
+        public IActionResult Login(UserLogin LoginInfo, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                return View();
-            }
-            else
-            {
+                bool isValidLogin = userManager.LoginUser(LoginInfo.UserEmail, LoginInfo.UserPassword);
+
+                if (isValidLogin)
+                {
+                    string jsonLogin = JsonSerializer.Serialize(new Models.UserModel()
+                    {
+                        UserEmail = LoginInfo.UserEmail
+                    });
+
+                    HttpContext.Session.SetString("User", jsonLogin);
+
+                    var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, LoginInfo.UserEmail),
+                    new Claim(ClaimTypes.Role, "User"),
+                };
+
+                    var claimsIdentity = new ClaimsIdentity(claims,
+                        CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        AllowRefresh = false,
+                        // Refreshing the authentication session should be allowed.
+
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                        // The time at which the authentication ticket expires. A 
+                        // value set here overrides the ExpireTimeSpan option of 
+                        // CookieAuthenticationOptions set with AddCookie.
+
+                        IsPersistent = false,
+                        // Whether the authentication session is persisted across 
+                        // multiple requests. When used with cookies, controls
+                        // whether the cookie's lifetime is absolute (matching the
+                        // lifetime of the authentication ticket) or session-based.
+
+                        IssuedUtc = DateTimeOffset.UtcNow,
+                        // The time at which the authentication ticket was issued.
+                    };
+
+                    HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        claimsPrincipal,
+                        authProperties).Wait();
+
+                    return Redirect(returnUrl ?? "~/");
+                }
+
+                ModelState.AddModelError("UserPassword", "Error: User name and password do not match");
                 return View(LoginInfo);
             }
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(LoginInfo);
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Remove("User");
+
+            HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Redirect("~/");
         }
     }
 }

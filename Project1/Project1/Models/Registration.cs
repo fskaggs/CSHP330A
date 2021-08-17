@@ -15,6 +15,7 @@ namespace Project1.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Password is requried for registration")]
+        [Compare(nameof(Password))]
         public string Password2 { get; set; }
 
     }

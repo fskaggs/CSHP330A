@@ -89,5 +89,15 @@ namespace Project1.Business
         {
             userRepository.AddUser(UserEmail, UserPassword);
         }
+
+        public bool LoginUser(string UserEmail, string UserPassword)
+        {
+            var user = userRepository.GetUser(UserEmail);
+
+            if (user.UserPassword != UserPassword)
+                return false;
+
+            return true;
+        }
     }
 }

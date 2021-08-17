@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Project1
 {
@@ -38,6 +40,15 @@ namespace Project1
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.LoginPath = new PathString("/Home/Login");
+                    options.AccessDeniedPath = new PathString("/Account/Denied");
+                });
+
+            services.AddSession();
 
             // Register and instantiate a single instance of the repositories
             services.AddSingleton<IClassRepository, ClassRepository>();
@@ -65,6 +76,8 @@ namespace Project1
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 

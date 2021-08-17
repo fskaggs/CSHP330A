@@ -12,5 +12,6 @@ namespace Project1.Business
         public UserModel User(int UserId);
         public UserModel User(string UserEmail);
         public void RegisterUser(string UserEmail, string UserPassword);
+        public bool LoginUser(string UserEmail, string UserPassword);
     }
 }
