@@ -9,7 +9,9 @@
         <form asp-action="Register">
             <div class="form-group">
                 <label asp-for="Email" class="col-form-label">Email</label>
-                <input asp-for="Email" type="text" class="form-control input-validation-error" id="Email" name="Email" data-val="true" data-val-required="Please enter your email address" />
+                <input asp-for="Email" type="text" class="form-control input-validation-error" 
+                       id="Email" name="Email" autofocus="autofocus" 
+                       data-val="true" data-val-required="Please enter your email address" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
