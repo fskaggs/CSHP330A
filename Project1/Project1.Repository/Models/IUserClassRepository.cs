@@ -10,5 +10,6 @@ namespace Project1.Repository.Models
     {
         Class[] GetClassesByUser(int UserId);
         User[] GetUsersByClass(int ClassId);
+        public void RegisterUserForClass(int UserId, int ClassId);
     }
 }

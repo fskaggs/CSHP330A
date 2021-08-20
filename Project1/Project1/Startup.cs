@@ -45,7 +45,7 @@ namespace Project1
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.LoginPath = new PathString("/Home/Login");
-                    options.AccessDeniedPath = new PathString("/Account/Denied");
+                    options.AccessDeniedPath = new PathString("/Home/Denied");
                 });
 
             services.AddSession();
@@ -58,6 +58,7 @@ namespace Project1
             // Register and instantiate a single instance of the managers
             services.AddSingleton<IClassManager, ClassManager>();
             services.AddSingleton<IUserManager, UserManager>();
+            services.AddSingleton<IUserClassManager, UserClassManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,28 @@
+﻿@model Project1.Models.EnrollViewModel
+
+<title>Course Enrollment</title>
+
+<h1>Enroll in Class</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EnrollInClass">
+            <select id="ddClasses2" class="form-control" asp-for="SelectedClass">
+                @foreach (var c in Model.Classes)
+                {
+                    <option value="@c.Value">@c.Text</option>
+                }
+            </select>
+
+            @*<select id="ddClasses1" class="form-control" asp-for="SelectedClass" asp-items="@(new SelectList(Model.Classes, "Value", "Text"))">
+                <option value="">--Select--</option>
+            </select>*@
+
+            <input type="hidden" asp-for="SelectedClass" />
+            
+            <div>
+                <input type="submit" value="Submit" class="btn btn-outline-dark" />
+            </div>
+        </form>
+    </div>
+</div>

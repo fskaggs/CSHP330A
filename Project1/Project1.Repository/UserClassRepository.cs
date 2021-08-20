@@ -18,5 +18,23 @@ namespace Project1.Repository
         {
             throw new NotImplementedException();
         }
+
+        public void RegisterUserForClass(int UserId, int ClassId)
+        {
+            var curUserEnrollment = DatabaseAccessor.Instance.UserClasses
+                .Where(uc => uc.ClassId == ClassId && uc.UserId == UserId).FirstOrDefault();
+
+            if (curUserEnrollment == null)
+            {
+                Database.UserClass userClass = new Database.UserClass()
+                {
+                    ClassId = ClassId,
+                    UserId = UserId
+                };
+
+                DatabaseAccessor.Instance.Add(userClass);
+                DatabaseAccessor.Instance.SaveChanges();
+            }
+        }
     }
 }

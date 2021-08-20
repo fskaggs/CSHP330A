@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Project1.Controllers
 {
@@ -22,15 +23,47 @@ namespace Project1.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IClassManager classManager;
         private readonly IUserManager userManager;
+        private readonly IUserClassManager userClassManager;
 
         public HomeController(ILogger<HomeController> logger, 
                               IClassManager ClassManagerInstance,
-                              IUserManager UserManagerInstance)
+                              IUserManager UserManagerInstance,
+                              IUserClassManager UserClassManager)
         //public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             classManager = ClassManagerInstance;
             userManager = UserManagerInstance;
+            userClassManager = UserClassManager;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public IActionResult EnrollInClass()
+        {
+            EnrollViewModel classList = new EnrollViewModel();
+            classList.Classes = classManager.Classes
+                .Select(c => new ItemList()
+                    {
+                        Text = c.ClassName,
+                        Value = c.ClassId
+                    })
+                .ToList<ItemList>();
+            return View(classList);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        public IActionResult EnrollInClass(EnrollViewModel ChosenClass)
+        {
+            if (ModelState.IsValid == true)
+            {
+                Business.UserModel user = userManager.User(User.Identity.Name);
+                userClassManager.RegisterForClass(user.UserId, ChosenClass.SelectedClass);
+                return Redirect("~/Home/StudentClasses");
+            }
+
+            return View();
         }
 
         public IActionResult Classes()
