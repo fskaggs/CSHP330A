@@ -7,20 +7,18 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EnrollInClass">
-            <select id="ddClasses2" class="form-control" asp-for="SelectedClass">
-                @foreach (var c in Model.Classes)
-                {
-                    <option value="@c.Value">@c.Text</option>
-                }
-            </select>
-
-            @*<select id="ddClasses1" class="form-control" asp-for="SelectedClass" asp-items="@(new SelectList(Model.Classes, "Value", "Text"))">
-                <option value="">--Select--</option>
-            </select>*@
-
+            <div class="form-group">
+                <select id="ddClasses2" class="form-control" asp-for="SelectedClass">
+                    @foreach (var c in Model.Classes)
+                    {
+                        <option value="@c.Value">@c.Text</option>
+                    }
+                </select>
+            </div>
+            
             <input type="hidden" asp-for="SelectedClass" />
             
-            <div>
+            <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-outline-dark" />
             </div>
         </form>

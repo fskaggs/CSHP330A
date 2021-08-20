@@ -94,6 +94,9 @@ namespace Project1.Business
         {
             var user = userRepository.GetUser(UserEmail);
 
+            if (user == null)
+                return false;
+
             if (user.UserPassword != UserPassword)
                 return false;
 
