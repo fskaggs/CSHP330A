@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserRepository;
+using UserRepository.Models;
 
 namespace Project2
 {
@@ -31,6 +33,8 @@ namespace Project2
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project2", Version = "v1" });
             });
+
+            services.AddSingleton<IUserRepository<UserModelRepo>, UserRepository.UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

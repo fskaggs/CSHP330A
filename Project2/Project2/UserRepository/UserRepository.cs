@@ -38,24 +38,25 @@ namespace UserRepository
             };
         }
 
-        public void Add(UserModelRepo Entity)
+        public UserModelRepo Add(UserModelRepo Entity)
         {
-            if (Entity == null)
-                throw new ArgumentNullException("User repository argument Entity is null on Add operation.");
+            var existingUser = Get(Entity.Id);
+            if (existingUser != null)
+                return null;
 
-            if (Get(Entity.Id) != null)
-                throw new ArgumentException("Attempt to Add Entity already present in DB");
-
+            Entity.Id = Guid.NewGuid().ToString();
             data.Add(Entity);
-            return;
+
+            return Entity;
         }
 
-        public void Delete(string Id)
+        public bool Delete(string Id)
         {
-            if (string.IsNullOrEmpty(Id) == true)
-                throw new ArgumentNullException("User repository argument Entity is null on Delete operation.");
+            if (Get(Id) == null)
+                return false;
 
             data.RemoveAll(x => x.Id == Id);
+            return true;
         }
 
         public IEnumerable<UserModelRepo> FindByCondition(Func<UserModelRepo, bool> Ex)
@@ -66,9 +67,6 @@ namespace UserRepository
 
         public UserModelRepo Get(string Id)
         {
-            if (String.IsNullOrEmpty(Id) == true)
-                throw new ArgumentNullException("User repository argument Entity is null on Get operation.");
-
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
@@ -79,22 +77,21 @@ namespace UserRepository
 
         public UserModelRepo GetByName(string Email)
         {
-            if (Email == null)
-                throw new ArgumentNullException("User repository argument Entity is null on GetByName operation.");
-
             return FindByCondition(x => x.Email == Email).FirstOrDefault();
         }
 
-        public void Update(UserModelRepo Entity)
+        public UserModelRepo Update(UserModelRepo Entity)
         {
             UserModelRepo entityToUpdate = data.Where<UserModelRepo>(x => x.Id == Entity.Id).FirstOrDefault();
 
             if (entityToUpdate == null)
-                throw new NullReferenceException("Attempt to update entity which does not exist");
+                return null;
 
             entityToUpdate.Email = Entity.Email;
             entityToUpdate.Password = Entity.Password;
             entityToUpdate.CreatedDate = Entity.CreatedDate;
+
+            return entityToUpdate;
         }
     }
 }

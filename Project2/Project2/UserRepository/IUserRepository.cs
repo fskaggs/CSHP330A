@@ -13,8 +13,8 @@ namespace UserRepository
         public IEnumerable<TEntity> FindByCondition(Func<TEntity, bool> expression);
         public TEntity Get(string Id);
         public TEntity GetByName(string Email);
-        public void Add(TEntity Entity);
-        public void Update(TEntity Entity);
-        public void Delete(string Id);
+        public TEntity Add(TEntity Entity);
+        public TEntity Update(TEntity Entity);
+        public bool Delete(string Id);
     }
 }

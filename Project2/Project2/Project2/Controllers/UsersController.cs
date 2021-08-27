@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using Project2.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using UserRepository;
+using UserRepository.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,36 +12,81 @@ namespace Project2.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        IUserRepository<UserModelRepo> usersRepository;
+
+        public UsersController(IUserRepository<UserModelRepo> Repo)
+        {
+            usersRepository = Repo;
+        }
+
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<UserModelRepo> Get()
         {
-            return new string[] { "value1", "value2" };
+            var users = usersRepository.GetAll();
+
+            return users;
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            var user = usersRepository.Get(id);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
         }
 
         // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] UserModelRepo value)
         {
+            if (ModelState.IsValid == true)
+            {
+                var user = usersRepository.Add(value);
+                return Created("~api/users", user);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(string id, [FromBody] UserModelRepo value)
         {
+            if (ModelState.IsValid == true)
+            {
+                if (usersRepository.Get(id) == null)
+                    return NotFound(new ErrorResponse() { Message = $"User record with id '{id}' not found", Data = value });
+
+                var userRec = usersRepository.Update(value);
+                if (userRec == null)
+                    return BadRequest(new ErrorResponse() { Message = "Failed to update user information.", Data = value });
+
+                return Ok(userRec);
+            }
+
+            return BadRequest(ModelState);
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(string id)
         {
+            if (ModelState.IsValid == true)
+            {
+                if (usersRepository.Delete(id) == true)
+                    return Ok();
+
+                return NotFound(id);
+            }
+                
+            return BadRequest(ModelState);
         }
     }
 }
