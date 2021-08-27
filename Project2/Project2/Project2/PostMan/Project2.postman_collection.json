@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "f80d6770-1ab5-4cda-b1d0-03c0d84d43f8",
+		"name": "Project2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get User by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:23414/api/users/efa73921-be06-4b81-ad19-3a27f1f4f07c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23414",
+					"path": [
+						"api",
+						"users",
+						"efa73921-be06-4b81-ad19-3a27f1f4f07c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:23414/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23414",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"string\",\r\n    \"password\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:23414/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23414",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Existing User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"efa73921-be06-4b81-ad19-3a27f1f4f07c\",\r\n    \"email\": \"Fred\",\r\n    \"password\": \"new password\",\r\n    \"createdDate\": \"2021-08-27T07:15:39.2738576Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:23414/api/users/efa73921-be06-4b81-ad19-3a27f1f4f07c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23414",
+					"path": [
+						"api",
+						"users",
+						"efa73921-be06-4b81-ad19-3a27f1f4f07c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Existing User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:23414/api/users/efa73921-be06-4b81-ad19-3a27f1f4f07d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "23414",
+					"path": [
+						"api",
+						"users",
+						"efa73921-be06-4b81-ad19-3a27f1f4f07d"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -45,6 +45,7 @@ namespace UserRepository
                 return null;
 
             Entity.Id = Guid.NewGuid().ToString();
+            Entity.CreatedDate = DateTime.UtcNow;
             data.Add(Entity);
 
             return Entity;

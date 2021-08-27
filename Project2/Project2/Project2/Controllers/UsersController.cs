@@ -47,7 +47,8 @@ namespace Project2.Controllers
             if (ModelState.IsValid == true)
             {
                 var user = usersRepository.Add(value);
-                return Created("~api/users", user);
+                return CreatedAtAction(nameof(Get), new { id = value.Id }, value);
+                //return Created("~api/users", user);
             }
             else
             {
@@ -83,7 +84,7 @@ namespace Project2.Controllers
                 if (usersRepository.Delete(id) == true)
                     return Ok();
 
-                return NotFound(id);
+                return NotFound(new ErrorResponse() { Message = $"User Id '{id}' not found", Data = id });
             }
                 
             return BadRequest(ModelState);
